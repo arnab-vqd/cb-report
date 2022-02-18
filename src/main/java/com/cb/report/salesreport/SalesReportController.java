@@ -18,8 +18,12 @@ public class SalesReportController {
 
 	@PostMapping("/getReport")
 	public ResponseEntity<List<SalesReport>> getReport(@RequestBody SalesReportParams params) {
-//		accountCreated = accountService.addNewAccount(accountCreated);
-		return new ResponseEntity<>(objSalesService.getAllAccounts(), HttpStatus.CREATED);
+		return new ResponseEntity<>(objSalesService.getAllReports(), HttpStatus.OK);
+	}
+
+	@GetMapping("/getDepartments")
+	public ResponseEntity<List<SalesReport>> getDepartments() {
+		return new ResponseEntity<>(objSalesService.getAllDepartments(), HttpStatus.OK);
 	}
 
 }

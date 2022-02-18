@@ -24,42 +24,31 @@ public class SalesService {
 
     JdbcTemplate jdbcTemplate;
 
+    public List<SalesReport> getAllReports(){
 
-//    AccountRepo accountRepo;
-//    BusinessUnitRepo businessUnitRepo;
+        String query = "select count(*), (CASE WHEN sh.Tablename != 'Home Delivery' THEN 'Dine In' ELSE sh.Tablename END) as Tablename FROM SaleDetail as SD " +
+                "INNER JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
+                "INNER JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
+                "INNER JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
+                "where CONVERT(DATE, DateTimeIn) between convert(date, '2022-01-01') AND convert(date, getdate()) " +
+                "and PG.DepartmentID = 116 " +
+                "group by (CASE WHEN sh.Tablename != 'Home Delivery' THEN 'Dine In' ELSE sh.Tablename END)";
 
-    public List<SalesReport> getAllAccounts(){
         List<SalesReport> sr = new ArrayList<>();
         jdbcTemplate.query(
-                "SELECT * FROM account WHERE active = ?", new Object[] { 1 },
-                (rs, rowNum) -> sr.add(new SalesReport(rs.getString("id")))
-        );
+                query,
+                (rs, rowNum) -> sr.add(new SalesReport(rs.getString(1),rs.getString(2))
+        ));
         return sr;
     }
-//
-//    @SneakyThrows
-//    public void validateAccount(AccountRequest account) {
-//        if(account.getName()==null || account.getName().trim().equals("")){
-//            throw new FinWizException("Account Name should not be blank", HttpStatus.PARTIAL_CONTENT);
-//        }
-//        if(accountRepo.findByName(account.getName())!=null){
-//            throw new FinWizException("Account Name Already Exists", HttpStatus.CONFLICT);
-//        }
-//    }
-//
-//    public Account addNewAccount(Account account) {
-//        return accountRepo.save(account);
-//    }
-//
-//    @SneakyThrows
-//    public Account addBusinessUnit(AccountRequest accountRequest){
-//        BusinessUnit businessUnit = businessUnitRepo.findByBusinessUnit(accountRequest.getBusinessUnitId());
-//        if(businessUnit==null){
-//            throw new FinWizException("No Business account found", HttpStatus.FAILED_DEPENDENCY);
-//        } else {
-//            return Account.builder().name(accountRequest.getName()).businessUnit(businessUnit).active(true).build();
-//        }
-//    }
 
-
+    public List<SalesReport> getAllDepartments(){
+        String query = "Select * from DepartmentMaster";
+        List<SalesReport> sr = new ArrayList<>();
+        jdbcTemplate.query(
+                query,
+                (rs, rowNum) -> sr.add(new SalesReport(rs.getString(1),rs.getString(2))
+                ));
+        return sr;
+    }
 }

@@ -8,11 +8,6 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class SalesReport {
-//    private Integer[] outlet;
-    private String viewType;
-//    private String valueType;
-//    private String days;
-//    private String quarter;
-//    private String startDate;
-//    private String toDate;
+    private String category;
+    private String value;
 }
