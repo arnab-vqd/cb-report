@@ -1,4 +1,4 @@
-package com.cb.report.swagger;
+package com.cb.swagger;
 
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

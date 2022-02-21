@@ -11,6 +11,6 @@ public class SalesReportParams {
     private String valueType;
     private String days;
     private String quarter;
-    private String startDate;
-    private String toDate;
+    private String startDate="YYYY-mm-dd";
+    private String toDate="YYYY-mm-dd";
 }

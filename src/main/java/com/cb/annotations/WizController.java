@@ -1,4 +1,4 @@
-package com.cb.report.annotations;
+package com.cb.annotations;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
