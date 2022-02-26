@@ -18,7 +18,7 @@ public class SalesService {
 
     JdbcTemplate jdbcTemplate;
 
-    public List<KeyValue> getAllReportsHomeDelivery(String startDate, String toDate){
+    public List<KeyValue> getAllReportsHomeDelivery(String startDate, String toDate) {
 
         String query = "select count(*), 'Home Delivery' as Tablename FROM SaleDetail as SD " +
                 "INNER JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
@@ -35,7 +35,7 @@ public class SalesService {
         return sr;
     }
 
-    public List<KeyValue> getAllReportsDineIn(String startDate,String toDate){
+    public List<KeyValue> getAllReportsDineIn(String startDate,String toDate) {
 
         String query = "select count(*), 'Dine In' as Tablename FROM SaleDetail as SD " +
                 "INNER JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
@@ -54,7 +54,8 @@ public class SalesService {
     }
 
     public List<KeyValue> getAllReports(String startDate, String toDate) {
-        List<KeyValue> reports = this.getAllReportsHomeDelivery(startDate,toDate);
+        List<KeyValue> reports = new ArrayList<>();
+        reports.addAll(this.getAllReportsHomeDelivery(startDate,toDate));
         reports.addAll(this.getAllReportsDineIn(startDate,toDate));
         log.info(String.valueOf(reports));
         return reports;

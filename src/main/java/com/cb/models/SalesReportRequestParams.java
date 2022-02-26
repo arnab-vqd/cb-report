@@ -1,11 +1,11 @@
-package com.cb.report.salesreport;
+package com.cb.models;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class SalesReportParams {
+public class SalesReportRequestParams {
     private Integer[] outlet;
     private String viewType;
     private String valueType;

@@ -14,11 +14,11 @@ import java.util.List;
 @Service
 public interface DataService {
 
-    public List<KeyValue> getAllDepartments();
+    List<KeyValue> getAllDepartments();
 
-    public List<KeyValue> getAllDesignations();
+    List<KeyValue> getAllDesignations();
 
-    public List<KeyValue> getAllUsers();
+    List<KeyValue> getAllUsers();
 
-    public List<KeyValue> getAllLocations();
+    List<KeyValue> getAllLocations();
 }
