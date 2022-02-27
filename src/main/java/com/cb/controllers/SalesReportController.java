@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Hashtable;
 import java.util.List;
 
 @WizController
@@ -20,8 +21,8 @@ public class SalesReportController {
 	SalesService objSalesService;
 
 	@PostMapping("/getReport")
-	public ResponseEntity<List<KeyValue>> getReport(@RequestBody SalesReportRequestParams params) {
-		return new ResponseEntity<>(objSalesService.getAllReports(params.getStartDate(), params.getToDate()), HttpStatus.OK);
+	public ResponseEntity<Hashtable<String, KeyValue>> getReport(@RequestBody SalesReportRequestParams params) {
+		return new ResponseEntity<>(objSalesService.getAllReports(params.getStartDate(), params.getToDate(), params.getOutlet()), HttpStatus.OK);
 	}
 
 
