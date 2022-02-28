@@ -27,4 +27,11 @@ public class DatabaseHandler {
         return sr;
     }
 
+    public KeyValue getKeyValue(String query){
+        return jdbcTemplate.queryForObject(
+                query,
+                (rs, rowNum) -> new KeyValue(rs.getString(1),rs.getString(2))
+                );
+    }
+
 }
