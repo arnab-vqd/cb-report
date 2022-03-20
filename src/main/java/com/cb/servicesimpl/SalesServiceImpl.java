@@ -28,8 +28,8 @@ public class SalesServiceImpl implements SalesService {
     @Override
     public Hashtable<String, KeyValue> getReportFood(String startDate, String toDate, String outlet) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.put("Beverage Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "117"));
-        reports.put("Beverage Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "117"));
+        reports.put("Food Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "116"));
+        reports.put("Food Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "116"));
         return reports;
     }
 
@@ -45,7 +45,7 @@ public class SalesServiceImpl implements SalesService {
     public Hashtable<String, KeyValue> getReportHookah(String startDate, String toDate, String outlet) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
         reports.put("Hookah Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "121"));
-        reports.put("Hookah Sale HD DI",this.getAllReportsDineIn(startDate,toDate, outlet, "121"));
+        reports.put("Hookah Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "121"));
         return reports;
     }
 
