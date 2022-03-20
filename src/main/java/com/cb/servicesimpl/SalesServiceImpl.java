@@ -18,62 +18,62 @@ import java.util.Hashtable;
 public class SalesServiceImpl implements SalesService {
 
     @Override
-    public Hashtable<String, KeyValue> getReportTotal(String startDate, String toDate, String outlet) {
+    public Hashtable<String, KeyValue> getReportTotal(String startDate, String toDate, String outlet, String valueType) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.put("Total Sale HD", this.getAllReportsHomeDelivery(startDate,toDate, outlet,  null));
-        reports.put("Total Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, null));
+        reports.put("Total Sale HD", this.getAllReportsHomeDelivery(startDate,toDate, outlet,  null, valueType));
+        reports.put("Total Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, null, valueType));
         return reports;
     }
 
     @Override
-    public Hashtable<String, KeyValue> getReportFood(String startDate, String toDate, String outlet) {
+    public Hashtable<String, KeyValue> getReportFood(String startDate, String toDate, String outlet, String valueType) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.put("Food Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "116"));
-        reports.put("Food Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "116"));
+        reports.put("Food Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "116", valueType));
+        reports.put("Food Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "116", valueType));
         return reports;
     }
 
     @Override
-    public Hashtable<String, KeyValue> getReportBeverage(String startDate, String toDate, String outlet) {
+    public Hashtable<String, KeyValue> getReportBeverage(String startDate, String toDate, String outlet, String valueType) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.put("Beverage Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "117"));
-        reports.put("Beverage Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "117"));
+        reports.put("Beverage Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "117", valueType));
+        reports.put("Beverage Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "117", valueType));
         return reports;
     }
 
     @Override
-    public Hashtable<String, KeyValue> getReportHookah(String startDate, String toDate, String outlet) {
+    public Hashtable<String, KeyValue> getReportHookah(String startDate, String toDate, String outlet, String valueType) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.put("Hookah Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "121"));
-        reports.put("Hookah Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "121"));
+        reports.put("Hookah Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "121", valueType));
+        reports.put("Hookah Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "121", valueType));
         return reports;
     }
 
     @Override
-    public Hashtable<String, KeyValue> getReportBuffet(String startDate, String toDate, String outlet) {
+    public Hashtable<String, KeyValue> getReportBuffet(String startDate, String toDate, String outlet, String valueType) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.put("Buffet Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "122"));
-        reports.put("Buffet Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "122"));
+        reports.put("Buffet Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "122", valueType));
+        reports.put("Buffet Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "122", valueType));
         return reports;
     }
 
     @Override
-    public Hashtable<String, KeyValue> getReportLiquor(String startDate, String toDate, String outlet) {
+    public Hashtable<String, KeyValue> getReportLiquor(String startDate, String toDate, String outlet, String valueType) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.put("Liquor Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "118,119"));
-        reports.put("Liquor Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "118,119"));
+        reports.put("Liquor Sale HD",this.getAllReportsHomeDelivery(startDate,toDate, outlet, "118,119", valueType));
+        reports.put("Liquor Sale DI",this.getAllReportsDineIn(startDate,toDate, outlet, "118,119", valueType));
         return reports;
     }
 
     @Override
-    public Hashtable<String, KeyValue> getAllReports(String startDate, String toDate, String outlet) {
+    public Hashtable<String, KeyValue> getAllReports(String startDate, String toDate, String outlet, String valueType) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.putAll(this.getReportTotal(startDate,toDate, outlet));
-        reports.putAll(this.getReportFood(startDate,toDate, outlet));
-        reports.putAll(this.getReportBeverage(startDate,toDate, outlet));
-        reports.putAll(this.getReportHookah(startDate,toDate, outlet));
-        reports.putAll(this.getReportBuffet(startDate,toDate, outlet));
-        reports.putAll(this.getReportLiquor(startDate,toDate, outlet));
+        reports.putAll(this.getReportTotal(startDate,toDate, outlet, valueType));
+        reports.putAll(this.getReportFood(startDate,toDate, outlet, valueType));
+        reports.putAll(this.getReportBeverage(startDate,toDate, outlet, valueType));
+        reports.putAll(this.getReportHookah(startDate,toDate, outlet, valueType));
+        reports.putAll(this.getReportBuffet(startDate,toDate, outlet, valueType));
+        reports.putAll(this.getReportLiquor(startDate,toDate, outlet, valueType));
         log.info(String.valueOf(reports));
         return reports;
     }
@@ -81,9 +81,9 @@ public class SalesServiceImpl implements SalesService {
 
     private DatabaseHandler dbHandler;
 
-    private KeyValue getAllReportsHomeDelivery(String startDate, String toDate, String locations, String departmentIds) {
+    private KeyValue getAllReportsHomeDelivery(String startDate, String toDate, String locations, String departmentIds, String valueType) {
 
-        String query = "select count(*), 'Home Delivery' as Tablename FROM SaleDetail as SD " +
+        String query = "select sum("+valueType+"), 'Home Delivery' as Tablename FROM SaleDetail as SD " +
                 "INNER JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
                 "INNER JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "INNER JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
@@ -99,9 +99,9 @@ public class SalesServiceImpl implements SalesService {
         return dbHandler.getKeyValue(query);
     }
 
-    private KeyValue getAllReportsDineIn(String startDate,String toDate, String locations, String departmentIds) {
+    private KeyValue getAllReportsDineIn(String startDate,String toDate, String locations, String departmentIds, String valueType) {
 
-        String query = "select count(*), 'Dine In' as Tablename FROM SaleDetail as SD " +
+        String query = "select sum("+valueType+"), 'Dine In' as Tablename FROM SaleDetail as SD " +
                 "INNER JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
                 "INNER JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "INNER JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
