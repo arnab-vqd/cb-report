@@ -33,8 +33,16 @@ public class DataServiceImpl implements DataService {
         return dbHandler.getKeyValueList(query);
     }
 
-    public List<KeyValue> getAllLocations(){
+    public List<KeyValue> getAllLocations(String cityId){
         String query = "select LocationId, LocationName from LocationMaster where IsActive=1";
+        if(cityId!=null && !cityId.equals("")){
+            query += (" and CityID = "+cityId);
+        }
+        return dbHandler.getKeyValueList(query);
+    }
+
+    public List<KeyValue> getAllCities(){
+        String query = "select CityID, CityName from CityMaster where IsActive=1";
         return dbHandler.getKeyValueList(query);
     }
 

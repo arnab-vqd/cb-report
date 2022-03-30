@@ -47,7 +47,7 @@ public class SalesServiceImpl implements SalesService {
 
     @Override
     public Hashtable<String, KeyValue> getReportLiquor(SalesReportRequestParams params) {
-        return getStringKeyValueHashtable(params,"Liquor","116");
+        return getStringKeyValueHashtable(params,"Liquor","118,119");
     }
 
     @Override
@@ -69,9 +69,9 @@ public class SalesServiceImpl implements SalesService {
     private KeyValue getAllReportsHomeDelivery(String startDate, String toDate, String locations, String departmentIds, String valueType) {
 
         String query = "select sum("+valueType+"), 'Home Delivery' as Tablename FROM SaleDetail as SD " +
-                "INNER JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
-                "INNER JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
-                "INNER JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
+                "JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
+                "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
+                "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
                 "where SH.Tablename = 'Home Delivery'"+
                 "and CONVERT(DATE, DateTimeIn) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
         if(locations!=null && locations.length()>0){
@@ -87,9 +87,9 @@ public class SalesServiceImpl implements SalesService {
     private KeyValue getAllReportsDineIn(String startDate,String toDate, String locations, String departmentIds, String valueType) {
 
         String query = "select sum("+valueType+"), 'Dine In' as Tablename FROM SaleDetail as SD " +
-                "INNER JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
-                "INNER JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
-                "INNER JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
+                "JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
+                "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
+                "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
                 "where SH.Tablename != 'Home Delivery'"+
                 "and CONVERT(DATE, DateTimeIn) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
         if(locations!=null && locations.length()>0){

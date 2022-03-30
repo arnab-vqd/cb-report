@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -34,8 +35,13 @@ public class ContentController {
 	}
 
 	@GetMapping("/getAllLocations")
-	public ResponseEntity<List<KeyValue>> getAllLocations() {
-		return new ResponseEntity<>(dataService.getAllLocations(), HttpStatus.OK);
+	public ResponseEntity<List<KeyValue>> getAllLocations(@RequestParam("cityID") String cityID) {
+		return new ResponseEntity<>(dataService.getAllLocations(cityID), HttpStatus.OK);
+	}
+
+	@GetMapping("/getAllCities")
+	public ResponseEntity<List<KeyValue>> getAllCities() {
+		return new ResponseEntity<>(dataService.getAllCities(), HttpStatus.OK);
 	}
 
 
