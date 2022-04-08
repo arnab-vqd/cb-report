@@ -13,15 +13,4 @@ public interface SalesService {
 
     Hashtable<String, KeyValue> getAllReports(SalesReportRequestParams params);
 
-    Hashtable<String, KeyValue> getReportTotal(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportFood(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportBeverage(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportHookah(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportBuffet(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportLiquor(SalesReportRequestParams params);
 }

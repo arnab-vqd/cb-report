@@ -7,8 +7,11 @@ import lombok.Setter;
 @Setter
 public class SalesReportRequestParams {
     private String outlet;
-    private String valueType;
+    private String saleType;
+    private String saleMode;
     private String startDate="YYYY-mm-dd";
     private String toDate="YYYY-mm-dd";
-    private boolean compareLastYear=false;
+    private String compareLastYear="Same Last Year";
+    private String compareStartDate="YYYY-mm-dd";
+    private String compareToDate="YYYY-mm-dd";
 }
