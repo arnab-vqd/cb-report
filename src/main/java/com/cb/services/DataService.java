@@ -22,5 +22,7 @@ public interface DataService {
 
     List<KeyValue> getAllLocations(String cityId);
 
-    List<KeyValue> getAllCities();
+    List<KeyValue> getAllCities(String companies);
+
+    List<String> getCompanyList();
 }

@@ -25,6 +25,11 @@ public class SalesReportController {
 		return new ResponseEntity<>(objSalesService.getAllReports(params), HttpStatus.OK);
 	}
 
+	@PostMapping("/getPax")
+	public ResponseEntity<Integer> getPax(@RequestBody SalesReportRequestParams params) {
+		return new ResponseEntity<>(objSalesService.getTotalNumberOfPeople(params), HttpStatus.OK);
+	}
+
 }
 
 

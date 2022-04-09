@@ -13,4 +13,5 @@ public interface SalesService {
 
     Hashtable<String, KeyValue> getAllReports(SalesReportRequestParams params);
 
+    int getTotalNumberOfPeople(SalesReportRequestParams params);
 }
