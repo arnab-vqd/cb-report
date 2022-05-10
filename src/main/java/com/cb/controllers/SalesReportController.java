@@ -26,13 +26,19 @@ public class SalesReportController {
 	}
 
 	@PostMapping("/getPax")
-	public ResponseEntity<Integer> getPax(@RequestBody SalesReportRequestParams params) {
+	public ResponseEntity<List<Integer>> getPax(@RequestBody SalesReportRequestParams params) {
 		return new ResponseEntity<>(objSalesService.getTotalNumberOfPeople(params), HttpStatus.OK);
 	}
 
 	@PostMapping("/getNoOfBills")
-	public ResponseEntity<Integer> getNoOfBills(@RequestBody SalesReportRequestParams params) {
+	public ResponseEntity<List<Integer>> getNoOfBills(@RequestBody SalesReportRequestParams params) {
 		return new ResponseEntity<>(objSalesService.getTotalNumberOfBills(params), HttpStatus.OK);
+	}
+
+
+	@PostMapping("/getNumberOfCustomers")
+	public ResponseEntity<List<Integer>> getNoOfCustomers(@RequestBody SalesReportRequestParams params) {
+		return new ResponseEntity<>(objSalesService.getTotalNumberOfCustomers(params), HttpStatus.OK);
 	}
 
 }
