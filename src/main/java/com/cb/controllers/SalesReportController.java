@@ -30,6 +30,11 @@ public class SalesReportController {
 		return new ResponseEntity<>(objSalesService.getTotalNumberOfPeople(params), HttpStatus.OK);
 	}
 
+	@PostMapping("/getNoOfBills")
+	public ResponseEntity<Integer> getNoOfBills(@RequestBody SalesReportRequestParams params) {
+		return new ResponseEntity<>(objSalesService.getTotalNumberOfBills(params), HttpStatus.OK);
+	}
+
 }
 
 

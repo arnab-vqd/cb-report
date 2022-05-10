@@ -40,28 +40,64 @@ public class SalesServiceImpl implements SalesService {
         String startDate = params.getStartDate();
         String endDate = params.getToDate();
 
-        String query = "select count(distinct(sh.CustomerID)) from SaleDetail as sd left join SaleHeader as sh " +
-                "ON sd.SerialNumber=sh.SerialNumber " +
-                "where CONVERT(DATE, DateTimeIn) between convert(date, '"+startDate+"') AND convert(date, '"+endDate+"') " ;
+        String query = "select sum(NoOfPax) from SaleHeader as sh " +
+                "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+endDate+"') " ;
+
         if(params.getOutlet()!=null && params.getOutlet().length()>0){
             query += "and SH.LocationId in ("+params.getOutlet()+") ";
         }
 
         if(params.getSaleMode()!=null && !params.getSaleMode().equals("total") && !params.getSaleMode().equals("average")){
-            query += "and DATEPART(WEEKDAY,DateTimeIn) in ("+params.getSaleMode()+") ";
+            query += "and DATEPART(WEEKDAY,VoucherDate) in ("+params.getSaleMode()+") ";
+        }
+
+        if(params.getSaleType()!=null && params.getSaleType().equals("deliverySale")) {
+            query += " and TableName='Home Delivery' ";
+        }
+        if(params.getSaleType()!=null && params.getSaleType().equals("dineInSale")) {
+            query += " and TableName!='Home Delivery' ";
         }
 
         return dbHandler.getInteger(query);
     }
 
+    @Override
+    public int getTotalNumberOfBills(SalesReportRequestParams params) {
+
+        String startDate = params.getStartDate();
+        String endDate = params.getToDate();
+
+        String query = "select count(*) from SaleHeader as sh " +
+                "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+endDate+"') " ;
+
+        if(params.getOutlet()!=null && params.getOutlet().length()>0){
+            query += " and SH.LocationId in ("+params.getOutlet()+") ";
+        }
+
+        if(params.getSaleMode()!=null && !params.getSaleMode().equals("total") && !params.getSaleMode().equals("average")){
+            query += " and DATEPART(WEEKDAY,VoucherDate) in ("+params.getSaleMode()+") ";
+        }
+
+        if(params.getSaleType()!=null && params.getSaleType().equals("deliverySale")) {
+            query += " and TableName='Home Delivery' ";
+        }
+        if(params.getSaleType()!=null && params.getSaleType().equals("dineInSale")) {
+            query += " and TableName!='Home Delivery' ";
+        }
+
+        return dbHandler.getInteger(query);
+    }
+
+
+
     private KeyValue getAllReportsHomeDelivery(String startDate, String toDate, String locations, String departmentIds, String saleMode) {
 
-        String query = "select sum(TaxableValue3), 'Home Delivery' as Tablename FROM SaleDetail as SD " +
+        String query = "select sum(FinalSaleAmount-TaxAmount), 'Home Delivery' as Tablename FROM SaleDetail as SD " +
                 "JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
                 "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
                 "where SH.Tablename = 'Home Delivery'"+
-                "and CONVERT(DATE, DateTimeIn) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
+                "and CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
         if(locations!=null && locations.length()>0){
             query += "and SH.LocationId in ("+locations+") ";
         }
@@ -69,7 +105,7 @@ public class SalesServiceImpl implements SalesService {
             query += "and PG.DepartmentID in ("+departmentIds+") ";
         }
         if(saleMode!=null && !saleMode.equals("total") && !saleMode.equals("average")){
-            query += "and DATEPART(WEEKDAY,DateTimeIn) in ("+saleMode+") ";
+            query += "and DATEPART(WEEKDAY,VoucherDate) in ("+saleMode+") ";
         }
 
         return dbHandler.getKeyValue(query);
@@ -77,12 +113,12 @@ public class SalesServiceImpl implements SalesService {
 
     private KeyValue getAllReportsDineIn(String startDate,String toDate, String locations, String departmentIds, String saleMode) {
 
-        String query = "select sum(TaxableValue3), 'Dine In' as Tablename FROM SaleDetail as SD " +
+        String query = "select sum(FinalSaleAmount-TaxAmount), 'Dine In' as Tablename FROM SaleDetail as SD " +
                 "JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
                 "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
                 "where SH.Tablename != 'Home Delivery'"+
-                "and CONVERT(DATE, DateTimeIn) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
+                "and CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
         if(locations!=null && locations.length()>0){
             query += "and SH.LocationId in ("+locations+") ";
         }
@@ -90,7 +126,7 @@ public class SalesServiceImpl implements SalesService {
             query += "and PG.DepartmentID in ("+departmentIds+") ";
         }
         if(saleMode!=null && !saleMode.equals("total") && !saleMode.equals("average")){
-            query += "and DATEPART(WEEKDAY,DateTimeIn) in ("+saleMode+") ";
+            query += "and DATEPART(WEEKDAY,VoucherDate) in ("+saleMode+") ";
         }
 
         return dbHandler.getKeyValue(query);
@@ -98,11 +134,11 @@ public class SalesServiceImpl implements SalesService {
 
     private KeyValue getAllReportsTotal(String startDate, String toDate, String locations, String departmentIds, String saleMode) {
 
-        String query = "select sum(TaxableValue3), 'Total' as Tablename FROM SaleHeader as SH  " +
+        String query = "select sum(FinalSaleAmount-TaxAmount), 'Total' as Tablename FROM SaleHeader as SH  " +
                 "JOIN SaleDetail as SD ON SD.SerialNumber=SH.SerialNumber " +
                 "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
-                "where CONVERT(DATE, DateTimeIn) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
+                "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
         if(locations!=null && locations.length()>0){
             query += "and SH.LocationId in ("+locations+") ";
         }
@@ -110,7 +146,7 @@ public class SalesServiceImpl implements SalesService {
             query += "and PG.DepartmentID in ("+departmentIds+") ";
         }
         if(saleMode!=null && !saleMode.equals("total") && !saleMode.equals("average")){
-            query += "and DATEPART(WEEKDAY,DateTimeIn) in ("+saleMode+") ";
+            query += "and DATEPART(WEEKDAY,VoucherDate) in ("+saleMode+") ";
         }
 
         return dbHandler.getKeyValue(query);

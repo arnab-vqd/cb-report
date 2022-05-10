@@ -39,15 +39,17 @@ public class ContentController {
 		return new ResponseEntity<>(dataService.getCompanyList(), HttpStatus.OK);
 	}
 
-	@GetMapping("/getAllLocations")
-	public ResponseEntity<List<KeyValue>> getAllLocations(@RequestParam("cityID") String cityID) {
-		return new ResponseEntity<>(dataService.getAllLocations(cityID), HttpStatus.OK);
-	}
-
 	@GetMapping("/getAllCities")
 	public ResponseEntity<List<KeyValue>> getAllCities(@RequestParam("companies") String companies) {
 		return new ResponseEntity<>(dataService.getAllCities(companies), HttpStatus.OK);
 	}
+
+	@GetMapping("/getAllLocations")
+	public ResponseEntity<List<KeyValue>> getAllLocations(@RequestParam("cityID") String cityID,@RequestParam("companies") String companies) {
+		return new ResponseEntity<>(dataService.getAllLocations(cityID,companies), HttpStatus.OK);
+	}
+
+
 
 
 
