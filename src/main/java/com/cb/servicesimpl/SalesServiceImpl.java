@@ -10,10 +10,8 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Hashtable;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -120,15 +118,23 @@ public class SalesServiceImpl implements SalesService {
 
         String query = "select count(distinct CustomerId) from SaleHeader as sh " +
                 "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+endDate+"') " ;
-
         query = addOtherParams(params, query, " and SH.LocationId in (", " and DATEPART(WEEKDAY,VoucherDate) in (");
-
         obj.add(dbHandler.getInteger(query));
 
         String queryCmp = "select count(distinct CustomerId) from SaleHeader as sh " +
                 "where CONVERT(DATE, VoucherDate) between convert(date, '"+compareStartDate+"') AND convert(date, '"+compareToDate+"') " ;
         queryCmp = addOtherParams(params, queryCmp, "and SH.LocationId in (", "and DATEPART(WEEKDAY,VoucherDate) in (");
         obj.add(dbHandler.getInteger(queryCmp));
+
+        String totalBill = "select sum(SubTotal-TaxTotal) from SaleHeader as sh " +
+                "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+endDate+"') " ;
+        totalBill = addOtherParams(params, totalBill, "and SH.LocationId in (", "and DATEPART(WEEKDAY,VoucherDate) in (");
+        obj.add(dbHandler.getInteger(totalBill));
+
+        String totalBillCmp = "select sum(SubTotal-TaxTotal) from SaleHeader as sh " +
+                "where CONVERT(DATE, VoucherDate) between convert(date, '"+compareStartDate+"') AND convert(date, '"+compareToDate+"') " ;
+        totalBillCmp = addOtherParams(params, totalBillCmp, "and SH.LocationId in (", "and DATEPART(WEEKDAY,VoucherDate) in (");
+        obj.add(dbHandler.getInteger(totalBillCmp));
 
         return obj;
     }
@@ -248,19 +254,27 @@ public class SalesServiceImpl implements SalesService {
             reports.put(name + " Sale"+type, this.getAllReportsDineIn(startDate, endDate, params.getOutlet(), departmentId, params.getSaleMode()));
         }
 
+//        if(params.getSaleMode()!=null && !params.getSaleMode().equals("total")){
+//            int weekDays[] = this.getWeekDays(startDate, endDate);
+//            KeyValue saleData = reports.get(name + " Sale"+type);
+//            if(params.getSaleMode().equals("average")){
+//                saleData.setKey(String.valueOf(getDoubleValue(saleData) /(weekDays[0]+weekDays[1])));
+//                reports.put(name + " Sale"+type,saleData);
+//            } else if(params.getSaleMode().equals("1,7")){
+//                saleData.setKey(String.valueOf(getDoubleValue(saleData) /weekDays[0]));
+//                reports.put(name + " Sale"+type,saleData);
+//            } else if(params.getSaleMode().equals("2,3,4,5,6")){
+//                saleData.setKey(String.valueOf(getDoubleValue(saleData) /weekDays[1]));
+//                reports.put(name + " Sale"+type,saleData);
+//            }
+//        }
+
         if(params.getSaleMode()!=null && !params.getSaleMode().equals("total")){
-            int weekDays[] = this.getWeekDays(startDate, endDate);
+            List<Integer> objList = Arrays.stream(params.getSaleMode().split(",")).map(Integer::valueOf).collect(Collectors.toList());
+            int weekDays = this.getSelectedDaysCount(startDate, endDate, objList);
             KeyValue saleData = reports.get(name + " Sale"+type);
-            if(params.getSaleMode().equals("average")){
-                saleData.setKey(String.valueOf(getDoubleValue(saleData) /(weekDays[0]+weekDays[1])));
+                saleData.setKey(String.valueOf(getDoubleValue(saleData)/weekDays));
                 reports.put(name + " Sale"+type,saleData);
-            } else if(params.getSaleMode().equals("1,7")){
-                saleData.setKey(String.valueOf(getDoubleValue(saleData) /weekDays[0]));
-                reports.put(name + " Sale"+type,saleData);
-            } else if(params.getSaleMode().equals("2,3,4,5,6")){
-                saleData.setKey(String.valueOf(getDoubleValue(saleData) /weekDays[1]));
-                reports.put(name + " Sale"+type,saleData);
-            }
         }
 
     }
@@ -290,5 +304,22 @@ public class SalesServiceImpl implements SalesService {
             start.add(Calendar.DATE, 1);
         }
         return new int[]{weekEnds, weekDays};
+    }
+
+
+    private int getSelectedDaysCount(String startDate, String endDate, List<Integer> selectedDays){
+        Calendar start = Calendar.getInstance();
+        start.setTime(Date.valueOf(startDate));
+        Calendar end = Calendar.getInstance();
+        end.setTime(Date.valueOf(endDate));
+
+        int days = 0;
+        while (start.before(end)) {
+            if (selectedDays.contains(start.get(Calendar.DAY_OF_WEEK))) {
+                days++;
+            }
+            start.add(Calendar.DATE, 1);
+        }
+        return days;
     }
 }
