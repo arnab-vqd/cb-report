@@ -116,22 +116,22 @@ public class SalesServiceImpl implements SalesService {
             compareToDate = params.getCompareToDate();
         }
 
-        String query = "select count(distinct CustomerId) from SaleHeader as sh " +
+        String query = "select sum(NoOfPax) from SaleHeader as sh " +
                 "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+endDate+"') " ;
         query = addOtherParams(params, query, " and SH.LocationId in (", " and DATEPART(WEEKDAY,VoucherDate) in (");
         obj.add(dbHandler.getInteger(query));
 
-        String queryCmp = "select count(distinct CustomerId) from SaleHeader as sh " +
+        String queryCmp = "select sum(NoOfPax) from SaleHeader as sh " +
                 "where CONVERT(DATE, VoucherDate) between convert(date, '"+compareStartDate+"') AND convert(date, '"+compareToDate+"') " ;
         queryCmp = addOtherParams(params, queryCmp, "and SH.LocationId in (", "and DATEPART(WEEKDAY,VoucherDate) in (");
         obj.add(dbHandler.getInteger(queryCmp));
 
-        String totalBill = "select sum(SubTotal-TaxTotal) from SaleHeader as sh " +
+        String totalBill = "select sum(SubTotal) from SaleHeader as sh " +
                 "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+endDate+"') " ;
         totalBill = addOtherParams(params, totalBill, "and SH.LocationId in (", "and DATEPART(WEEKDAY,VoucherDate) in (");
         obj.add(dbHandler.getInteger(totalBill));
 
-        String totalBillCmp = "select sum(SubTotal-TaxTotal) from SaleHeader as sh " +
+        String totalBillCmp = "select sum(SubTotal) from SaleHeader as sh " +
                 "where CONVERT(DATE, VoucherDate) between convert(date, '"+compareStartDate+"') AND convert(date, '"+compareToDate+"') " ;
         totalBillCmp = addOtherParams(params, totalBillCmp, "and SH.LocationId in (", "and DATEPART(WEEKDAY,VoucherDate) in (");
         obj.add(dbHandler.getInteger(totalBillCmp));
