@@ -24,12 +24,12 @@ public class SalesServiceImpl implements SalesService {
     @Override
     public Hashtable<String, KeyValue> getAllReports(SalesReportRequestParams params) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
-        reports.putAll(getStringKeyValueHashtable(params,"Total",null));
+        reports.putAll(getStringKeyValueHashtable(params,"Total","116,117,118,119,121,122"));
         reports.putAll(getStringKeyValueHashtable(params,"Food","116"));
         reports.putAll(getStringKeyValueHashtable(params,"Beverage","117"));
         reports.putAll(getStringKeyValueHashtable(params,"Hookah","121"));
         reports.putAll(getStringKeyValueHashtable(params,"Buffet","122"));
-        reports.putAll(getStringKeyValueHashtable(params,"Liquor","118,119"));
+        reports.putAll(getStringKeyValueHashtable(params,"Liquor","118"));
         log.info(String.valueOf(reports));
         return reports;
     }
@@ -206,7 +206,7 @@ public class SalesServiceImpl implements SalesService {
     private KeyValue getAllReportsTotal(String startDate, String toDate, String locations, String departmentIds, String saleMode) {
 
         String query = "select sum(FinalSaleAmount-TaxAmount), 'Total' as Tablename FROM SaleHeader as SH  " +
-                "JOIN SaleDetail as SD ON SD.SerialNumber=SH.SerialNumber " +
+                "left JOIN SaleDetail as SD ON SD.SerialNumber=SH.SerialNumber " +
                 "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
                 "where CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
@@ -219,7 +219,7 @@ public class SalesServiceImpl implements SalesService {
         if(saleMode!=null && !saleMode.equals("total") && !saleMode.equals("average")){
             query += "and DATEPART(WEEKDAY,VoucherDate) in ("+saleMode+") ";
         }
-
+        System.out.println(query);
         return dbHandler.getKeyValue(query);
     }
 
