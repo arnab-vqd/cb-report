@@ -6,6 +6,7 @@ import com.cb.models.SalesReportRequestParams;
 import org.springframework.stereotype.Service;
 
 import java.util.Hashtable;
+import java.util.List;
 
 
 @Service
@@ -13,15 +14,9 @@ public interface SalesService {
 
     Hashtable<String, KeyValue> getAllReports(SalesReportRequestParams params);
 
-    Hashtable<String, KeyValue> getReportTotal(SalesReportRequestParams params);
+    List<Integer> getTotalNumberOfPeople(SalesReportRequestParams params);
 
-    Hashtable<String, KeyValue> getReportFood(SalesReportRequestParams params);
+    List<Integer> getTotalNumberOfBills(SalesReportRequestParams params);
 
-    Hashtable<String, KeyValue> getReportBeverage(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportHookah(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportBuffet(SalesReportRequestParams params);
-
-    Hashtable<String, KeyValue> getReportLiquor(SalesReportRequestParams params);
+    List<Integer> getTotalNumberOfCustomers(SalesReportRequestParams params);
 }

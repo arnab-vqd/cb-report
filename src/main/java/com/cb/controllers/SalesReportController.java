@@ -25,36 +25,21 @@ public class SalesReportController {
 		return new ResponseEntity<>(objSalesService.getAllReports(params), HttpStatus.OK);
 	}
 
-	@PostMapping("/getReportTotal")
-	public ResponseEntity<Hashtable<String, KeyValue>> getReportTotal(@RequestBody SalesReportRequestParams params) {
-		return new ResponseEntity<>(objSalesService.getReportTotal(params), HttpStatus.OK);
+	@PostMapping("/getPax")
+	public ResponseEntity<List<Integer>> getPax(@RequestBody SalesReportRequestParams params) {
+		return new ResponseEntity<>(objSalesService.getTotalNumberOfPeople(params), HttpStatus.OK);
 	}
 
-	@PostMapping("/getReportFood")
-	public ResponseEntity<Hashtable<String, KeyValue>> getReportFood(@RequestBody SalesReportRequestParams params) {
-		return new ResponseEntity<>(objSalesService.getReportFood(params), HttpStatus.OK);
+	@PostMapping("/getNoOfBills")
+	public ResponseEntity<List<Integer>> getNoOfBills(@RequestBody SalesReportRequestParams params) {
+		return new ResponseEntity<>(objSalesService.getTotalNumberOfBills(params), HttpStatus.OK);
 	}
 
-	@PostMapping("/getReportBeverage")
-	public ResponseEntity<Hashtable<String, KeyValue>> getReportBeverage(@RequestBody SalesReportRequestParams params) {
-		return new ResponseEntity<>(objSalesService.getReportBeverage(params), HttpStatus.OK);
-	}
 
-	@PostMapping("/getReportHookah")
-	public ResponseEntity<Hashtable<String, KeyValue>> getReportHookah(@RequestBody SalesReportRequestParams params) {
-		return new ResponseEntity<>(objSalesService.getReportHookah(params), HttpStatus.OK);
+	@PostMapping("/getNumberOfCustomers")
+	public ResponseEntity<List<Integer>> getNoOfCustomers(@RequestBody SalesReportRequestParams params) {
+		return new ResponseEntity<>(objSalesService.getTotalNumberOfCustomers(params), HttpStatus.OK);
 	}
-
-	@PostMapping("/getReportBuffet")
-	public ResponseEntity<Hashtable<String, KeyValue>> getReportBuffet(@RequestBody SalesReportRequestParams params) {
-		return new ResponseEntity<>(objSalesService.getReportBuffet(params), HttpStatus.OK);
-	}
-
-	@PostMapping("/getReportLiquor")
-	public ResponseEntity<Hashtable<String, KeyValue>> getReportLiquor(@RequestBody SalesReportRequestParams params) {
-		return new ResponseEntity<>(objSalesService.getReportLiquor(params), HttpStatus.OK);
-	}
-
 
 }
 

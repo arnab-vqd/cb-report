@@ -34,4 +34,20 @@ public class DatabaseHandler {
                 );
     }
 
+    public int getInteger(String query){
+        return jdbcTemplate.queryForObject(
+                query,
+                (rs, rowNum) -> rs.getInt(1)
+        );
+    }
+
+    public List<String> getStringList(String query){
+        List<String> sr = new ArrayList<>();
+        jdbcTemplate.query(
+                query,
+                (rs, rowNum) -> sr.add(rs.getString(1))
+                );
+        return sr;
+    }
+
 }

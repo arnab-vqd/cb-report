@@ -20,7 +20,9 @@ public interface DataService {
 
     List<KeyValue> getAllUsers();
 
-    List<KeyValue> getAllLocations(String cityId);
+    List<String> getCompanyList();
 
-    List<KeyValue> getAllCities();
+    List<KeyValue> getAllCities(String companies);
+
+    List<KeyValue> getAllLocations(String cityId,String companies);
 }
