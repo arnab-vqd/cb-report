@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://0.0.0.0:4200")
 @Controller
 @ApiResponses(value = {
         @ApiResponse(code = 200, message = "OK"),
