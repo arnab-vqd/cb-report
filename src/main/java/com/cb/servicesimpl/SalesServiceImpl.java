@@ -25,7 +25,7 @@ public class SalesServiceImpl implements SalesService {
     public Hashtable<String, KeyValue> getAllReports(SalesReportRequestParams params) {
         Hashtable<String, KeyValue> reports = new Hashtable<>();
         reports.putAll(getStringKeyValueHashtable(params,"Total","116,117,118,119,121,122"));
-        reports.putAll(getStringKeyValueHashtable(params,"Food","116"));
+        reports.putAll(getStringKeyValueHashtable(params,"Food","116,122"));
         reports.putAll(getStringKeyValueHashtable(params,"Beverage","117"));
         reports.putAll(getStringKeyValueHashtable(params,"Hookah","121"));
         reports.putAll(getStringKeyValueHashtable(params,"Buffet","122"));
@@ -174,6 +174,11 @@ public class SalesServiceImpl implements SalesService {
         }
         if(departmentIds!=null){
             query += "and PG.DepartmentID in ("+departmentIds+") ";
+            if(departmentIds.equals("122")){
+                query += "and PM.SubGroupID = 309 ";
+            } else if(departmentIds.equals("116,122")){
+                query += "and PM.SubGroupID != 309 ";
+            }
         }
         if(saleMode!=null && !saleMode.equals("total") && !saleMode.equals("average")){
             query += "and DATEPART(WEEKDAY,VoucherDate) in ("+saleMode+") ";
@@ -195,6 +200,11 @@ public class SalesServiceImpl implements SalesService {
         }
         if(departmentIds!=null){
             query += "and PG.DepartmentID in ("+departmentIds+") ";
+            if(departmentIds.equals("122")){
+                query += "and PM.SubGroupID = 309 ";
+            } else if(departmentIds.equals("116,122")){
+                query += "and PM.SubGroupID != 309 ";
+            }
         }
         if(saleMode!=null && !saleMode.equals("total") && !saleMode.equals("average")){
             query += "and DATEPART(WEEKDAY,VoucherDate) in ("+saleMode+") ";
@@ -215,6 +225,11 @@ public class SalesServiceImpl implements SalesService {
         }
         if(departmentIds!=null){
             query += "and PG.DepartmentID in ("+departmentIds+") ";
+            if(departmentIds.equals("122")){
+                query += "and PM.SubGroupID = 309 ";
+            } else if(departmentIds.equals("116,122")){
+                query += "and PM.SubGroupID != 309 ";
+            }
         }
         if(saleMode!=null && !saleMode.equals("total") && !saleMode.equals("average")){
             query += "and DATEPART(WEEKDAY,VoucherDate) in ("+saleMode+") ";
