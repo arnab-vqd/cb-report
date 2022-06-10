@@ -150,10 +150,11 @@ public class SalesServiceImpl implements SalesService {
         }
 
         if (params.getSaleType() != null && params.getSaleType().equals("deliverySale")) {
-            query += " and TableName='Home Delivery' ";
+            query += " and (TPChannel like '%Swiggy%' OR  TPChannel like '%Zomato%' )";
+
         }
         if (params.getSaleType() != null && params.getSaleType().equals("dineInSale")) {
-            query += " and TableName!='Home Delivery' ";
+            query += " and (TPChannel not like '%Swiggy%' AND  TPChannel not like '%Zomato%' )";
         }
         return query;
     }
