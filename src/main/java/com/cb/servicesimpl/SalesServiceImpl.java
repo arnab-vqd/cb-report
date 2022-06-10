@@ -167,7 +167,7 @@ public class SalesServiceImpl implements SalesService {
                 "JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
                 "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
-                "where SH.Tablename = 'Home Delivery'"+
+                "where (SH.TPChannel like '%Swiggy%' or SH.TPChannel like '%Zomato%' )"+
                 "and CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
         if(locations!=null && locations.length()>0){
             query += "and SH.LocationId in ("+locations+") ";
@@ -193,7 +193,7 @@ public class SalesServiceImpl implements SalesService {
                 "JOIN SaleHeader as SH ON SD.SerialNumber=SH.SerialNumber " +
                 "JOIN ProductMaster as PM ON PM.ProductID= Sd.ProductID " +
                 "JOIN ProductGroupMaster as PG ON PG.ProductGroupID=PM.ProductGroupID " +
-                "where SH.Tablename != 'Home Delivery'"+
+                "where (SH.TPChannel not like '%Swiggy%' or SH.TPChannel not like '%Zomato%' )" +
                 "and CONVERT(DATE, VoucherDate) between convert(date, '"+startDate+"') AND convert(date, '"+toDate+"') " ;
         if(locations!=null && locations.length()>0){
             query += "and SH.LocationId in ("+locations+") ";
